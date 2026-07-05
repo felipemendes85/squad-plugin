@@ -21,10 +21,24 @@ Para testar localmente sem publicar:
 claude --plugin-dir /caminho/para/squad-plugin
 ```
 
+## Pós-instalação (uma vez por projeto)
+
+Dentro do projeto onde você quer usar o squad, rode:
+
+```
+/setup-squad
+```
+
+Ele instala o protocolo de handoff no `CLAUDE.md` do projeto (plugins não
+carregam CLAUDE.md automaticamente), cria `docs/security-guidelines.md` a
+partir do template e prepara a pasta `docs/` onde os agentes escrevem os
+artefatos. Nada existente é sobrescrito.
+
 ## Skills (invocação por /)
 
 | Skill | Faz | Auto-invocação |
 |-------|-----|----------------|
+| `/setup-squad` | Prepara o projeto atual (handoff + guidelines + docs/) | Não (só manual) |
 | `/demanda <texto>` | Esteira completa PO→UX→Dev→QA→DPO (subagents) | Não (só manual) |
 | `/team <texto>` | Mesma cadeia como Agent Team (teammates se falam)* | Não (só manual) |
 | `/story <texto>` | Esteira leve PO→UX→Dev para prototipagem | Não (só manual) |
@@ -33,26 +47,46 @@ claude --plugin-dir /caminho/para/squad-plugin
 | `/release [alvo]` | Merge na main só com aprovação humana explícita | Não (só manual) |
 | `secure-development` | Framework de segurança (BUILD/REVIEW) usado por Dev e DPO | Sim |
 
-*`/team` exige `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` no settings.json e
-reinício da sessão.
+*`/team` exige agent teams habilitado — adicione ao `.claude/settings.json`
+do projeto e reinicie a sessão:
+
+```json
+{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
+```
+
+Se o nome curto colidir com skill de outro plugin, use a forma qualificada:
+`/squad-produto:demanda`.
 
 ## Agentes
 
 `po`, `ux`, `fullstack-dev`, `qa`, `dpo-security` — cada um com escopo de
 ferramentas próprio e o protocolo de handoff (status, premissas, questões em
-aberto, confiança) que garante comunicação sem ruído entre etapas.
+aberto, confiança) que garante comunicação sem ruído entre etapas. O formato
+do handoff vive em `templates/CLAUDE-squad.md` e é instalado no projeto pelo
+`/setup-squad`.
 
-## Pós-instalação (por projeto)
+## Fluxo típico
 
-1. Crie `docs/security-guidelines.md` com as regras da empresa (o Dev lê antes
-   de codar; o DPO usa como prioridade). Um modelo acompanha o projeto de
-   referência.
-2. Copie o `CLAUDE.md` de orquestração (protocolo de handoff + cadeia) para
-   `.claude/CLAUDE.md` do projeto — plugins não carregam CLAUDE.md
-   automaticamente.
+```
+/setup-squad                          # uma vez por projeto
+/demanda quero um cadastro de metas   # esteira completa
+/fix-seguranca todos os altos         # fecha riscos do DPO
+/release                              # gate humano → merge na main
+```
+
+## Estrutura do repositório
+
+```
+.claude-plugin/   plugin.json + marketplace.json
+agents/           os 5 papéis do squad
+skills/           esteiras, loop de segurança, release, setup
+templates/        CLAUDE-squad.md (handoff) + security-guidelines.md
+```
 
 ## Publicando alterações
 
 O `name` do plugin no marketplace é imutável após publicado (renomear quebra
 a instalação de quem já tem). Para mudar o rótulo exibido, altere
-`displayName`. Versione via `version` no `plugin.json`.
+`displayName`. Versione via `version` no `plugin.json`. O
+`.claude-plugin/marketplace.json` precisa estar na raiz do repositório no
+GitHub — os arquivos deste diretório SÃO a raiz do repo `squad-plugin`.

@@ -16,7 +16,9 @@ o Felipe leva ao DPO da empresa.
 
 ## Sua base técnica: a skill secure-development
 
-Use a skill `secure-development` (em `.claude/skills/secure-development/SKILL.md`)
+Use a skill `secure-development` do plugin (arquivo
+`${CLAUDE_PLUGIN_ROOT}/skills/secure-development/SKILL.md`; se a variável não
+resolver, localize `**/secure-development/SKILL.md` no diretório de plugins)
 como seu framework de auditoria, operando no modo **REVIEW**:
 
 - **Rastreie o fluxo de dados** de cada input não confiável até o sink (SQL,

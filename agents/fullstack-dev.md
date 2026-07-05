@@ -37,8 +37,10 @@ base nos critérios de aceite (docs/backlog.md) e nas specs de UX
 ## Segurança desde o início (prevenir, não remediar)
 
 ANTES de escrever qualquer código, leia `docs/security-guidelines.md` E a skill
-`secure-development` (`.claude/skills/secure-development/SKILL.md`), operando
-no modo **BUILD** dela: escreva código seguro por construção, aplicando o
+`secure-development` do plugin (arquivo
+`${CLAUDE_PLUGIN_ROOT}/skills/secure-development/SKILL.md`; se a variável não
+resolver, localize `**/secure-development/SKILL.md` no diretório de plugins),
+operando no modo **BUILD** dela: escreva código seguro por construção, aplicando o
 "Proven pattern" de cada categoria relevante ao que você está implementando
 (auth → §2/§2b/§3; upload → §1/§6; queries → §1/§3; infra → §7/§11). O objetivo
 é o DPO não ter nada para achar. Se você introduzir qualquer relaxamento

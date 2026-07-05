@@ -20,8 +20,13 @@ $ARGUMENTS
 Agent teams exigem a flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` no
 settings.json ou no ambiente. Se ela não estiver ativa, o Claude cria
 subagents em vez de teammates. Se você perceber que a flag não está ativa,
-avise o Felipe para habilitá-la (o arquivo `.claude/settings.json` já traz a
-configuração) e reiniciar a sessão antes de continuar. Não tente contornar.
+avise o Felipe para adicionar ao `.claude/settings.json` do projeto:
+
+```json
+{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
+```
+
+e reiniciar a sessão antes de continuar. Não tente contornar.
 
 ## Monte o time (5 teammates)
 
@@ -30,15 +35,19 @@ NÃO herdam seu histórico de conversa — carregam CLAUDE.md, MCP e skills do
 projeto automaticamente, mas o contexto específico da demanda você precisa
 passar no prompt de spawn. Seja generoso no briefing inicial.
 
+Os briefings dos papéis estão no diretório do plugin, em
+`${CLAUDE_PLUGIN_ROOT}/agents/`:
+
 - **po** — decupa a demanda em user stories com critérios de aceite em
-  `docs/backlog.md`. Papel descrito em `.claude/agents/po.md`.
-- **ux** — especifica telas em `docs/ux-specs.md`. Ver `.claude/agents/ux.md`.
+  `docs/backlog.md`. Papel descrito em `${CLAUDE_PLUGIN_ROOT}/agents/po.md`.
+- **ux** — especifica telas em `docs/ux-specs.md`. Ver
+  `${CLAUDE_PLUGIN_ROOT}/agents/ux.md`.
 - **dev** — implementa em Python/Supabase/Vercel, lê as guidelines de
-  segurança ANTES de codar. Ver `.claude/agents/fullstack-dev.md`.
+  segurança ANTES de codar. Ver `${CLAUDE_PLUGIN_ROOT}/agents/fullstack-dev.md`.
 - **qa** — testa com pytest + Playwright em `docs/qa-report.md`. Ver
-  `.claude/agents/qa.md`.
+  `${CLAUDE_PLUGIN_ROOT}/agents/qa.md`.
 - **dpo** — revisa segurança/LGPD em `docs/security-review.md`, sinaliza (não
-  bloqueia). Ver `.claude/agents/dpo-security.md`.
+  bloqueia). Ver `${CLAUDE_PLUGIN_ROOT}/agents/dpo-security.md`.
 
 Para cada teammate, inclua no prompt de spawn: o papel, o arquivo de agente
 correspondente como referência, a demanda, e quais arquivos ele é dono de
