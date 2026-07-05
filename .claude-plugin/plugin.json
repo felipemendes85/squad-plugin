@@ -1,0 +1,9 @@
+{
+  "name": "squad-produto",
+  "description": "Squad de desenvolvimento multi-agente: PO, UX, Full Stack Dev (Python/Supabase/Vercel), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Inclui esteiras /demanda, /story e /team, loop de segurança /fix-seguranca e /add-guideline, e gate de produção /release.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Felipe Mendes",
+    "url": "https://github.com/felipemendes85"
+  }
+}

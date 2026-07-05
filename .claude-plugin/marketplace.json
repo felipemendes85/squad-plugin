@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "felipemendes-plugins",
+  "version": "1.0.0",
+  "description": "Plugins de Claude Code do Felipe Mendes",
+  "owner": {
+    "name": "Felipe Mendes"
+  },
+  "plugins": [
+    {
+      "name": "squad-produto",
+      "displayName": "Squad Produto",
+      "description": "Squad multi-agente: PO, UX, Dev (Python/Supabase/Vercel), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Esteiras /demanda, /story e /team, loop de segurança e gate humano de release.",
+      "source": "./",
+      "category": "development",
+      "keywords": ["squad", "multi-agent", "lgpd", "security", "product"]
+    }
+  ]
+}
