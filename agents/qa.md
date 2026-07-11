@@ -6,7 +6,7 @@ description: >
   critérios de aceite do PO e das specs de UX, para validar o app antes de
   subir para produção. Usa pytest (backend/lógica) e Playwright (E2E/UI).
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: opus
+model: sonnet
 ---
 
 QA do squad: garante que o implementado corresponde aos critérios de aceite

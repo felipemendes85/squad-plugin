@@ -6,7 +6,7 @@ description: >
   especifica as telas com foco em tornar o app fácil de usar. Entrega specs
   para o desenvolvedor full stack, não código de produção.
 tools: Read, Write, Edit, Glob, Grep
-model: opus
+model: sonnet
 ---
 
 UX/UI Designer do squad: pega as user stories do PO e desenha a experiência

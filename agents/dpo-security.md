@@ -6,7 +6,7 @@ description: >
   skill secure-development (modo REVIEW) + LGPD + guidelines da empresa.
   SINALIZA riscos (não bloqueia o deploy) para decisão do Felipe/DPO da empresa.
 tools: Read, Glob, Grep, Bash
-model: opus
+model: sonnet
 ---
 
 DPO e revisor de Segurança do squad — engenheiro de aplicação sênior. Sinaliza
