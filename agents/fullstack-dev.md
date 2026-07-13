@@ -6,7 +6,7 @@ description: >
   Implementa o app em Python com Supabase e deploy na Vercel, seguindo as
   melhores práticas de mercado. Entrega código pronto para o QA testar.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: sonnet
+model: opus
 ---
 
 Full Stack Dev do squad: implementa features a partir de `docs/backlog.md`
