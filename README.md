@@ -1,10 +1,12 @@
 # Squad Produto — Plugin para Claude Code
 
-Squad multi-agente com 5 papéis (PO, UX, Full Stack Dev, QA, DPO/Segurança),
-esteiras orquestradas com gates de integridade, protocolo de handoff entre
-agentes, loop de segurança fechado (skill `secure-development` em modo BUILD
-no Dev e modo REVIEW no DPO) e gate humano de release. Funciona no Claude Code
-em qualquer interface: terminal, VS Code, JetBrains e app desktop.
+Squad multi-agente com 7 papéis (PO, UX, Tech Lead, Backend Dev, Frontend Dev,
+QA, DPO/Segurança), esteiras orquestradas com gates de integridade, protocolo
+de handoff entre agentes, governança Spec-Driven (o Tech Lead publica o
+contrato técnico antes de Backend e Frontend codarem em paralelo), loop de
+segurança fechado (skill `secure-development` em modo BUILD nos devs e modo
+REVIEW no DPO) e gate humano de release. Funciona no Claude Code em qualquer
+interface: terminal, VS Code, JetBrains e app desktop.
 
 ## Instalação
 
@@ -39,13 +41,13 @@ artefatos. Nada existente é sobrescrito.
 | Skill | Faz | Auto-invocação |
 |-------|-----|----------------|
 | `/setup-squad` | Prepara o projeto atual (handoff + guidelines + docs/) | Não (só manual) |
-| `/demanda <texto>` | Esteira completa PO→UX→Dev→QA→DPO (subagents) | Não (só manual) |
+| `/demanda <texto>` | Esteira completa PO→UX→Tech Lead→Backend/Frontend Dev→QA→DPO (subagents) | Não (só manual) |
 | `/team <texto>` | Mesma cadeia como Agent Team (teammates se falam)* | Não (só manual) |
-| `/story <texto>` | Esteira leve PO→UX→Dev para prototipagem | Não (só manual) |
+| `/story <texto>` | Esteira leve PO→UX→Dev fullstack (sem split) para prototipagem | Não (só manual) |
 | `/fix-seguranca <risco>` | Dev corrige → QA valida regressão → DPO confirma | Sim |
 | `/add-guideline <regra>` | Registra risco novo nas guidelines | Sim |
 | `/release [alvo]` | Merge na main só com aprovação humana explícita | Não (só manual) |
-| `secure-development` | Framework de segurança (BUILD/REVIEW) usado por Dev e DPO | Sim |
+| `secure-development` | Framework de segurança (BUILD/REVIEW) usado pelos devs e pelo DPO | Sim |
 
 *`/team` exige agent teams habilitado — adicione ao `.claude/settings.json`
 do projeto e reinicie a sessão:
@@ -59,11 +61,18 @@ Se o nome curto colidir com skill de outro plugin, use a forma qualificada:
 
 ## Agentes
 
-`po`, `ux`, `fullstack-dev`, `qa`, `dpo-security` — cada um com escopo de
-ferramentas próprio e o protocolo de handoff (status, premissas, questões em
-aberto, confiança) que garante comunicação sem ruído entre etapas. O formato
-do handoff vive em `templates/CLAUDE-squad.md` e é instalado no projeto pelo
-`/setup-squad`.
+`po`, `ux`, `tech-lead`, `backend-dev`, `frontend-dev`, `qa`, `dpo-security`
+— cada um com escopo de ferramentas próprio, comunicação direta via
+`SendMessage`/`TaskList`/`TaskUpdate`/`TaskGet` (usada de verdade no modo
+`/team`), e o protocolo de handoff (status, premissas, questões em aberto,
+confiança) que garante comunicação sem ruído entre etapas. O `tech-lead`
+decide, por story, se ela é frontend-only (Supabase direto) ou cruza para o
+`backend-dev` (Python/FastAPI) — nem toda story precisa dos dois. Um agente
+`fullstack-dev` (Python/FastAPI + frontend) continua disponível e é o usado
+pela esteira leve `/story`, para prototipagem sem o split completo.
+
+O formato do handoff vive em `templates/CLAUDE-squad.md` e é instalado no
+projeto pelo `/setup-squad`.
 
 ## Fluxo típico
 
@@ -78,7 +87,7 @@ do handoff vive em `templates/CLAUDE-squad.md` e é instalado no projeto pelo
 
 ```
 .claude-plugin/   plugin.json + marketplace.json
-agents/           os 5 papéis do squad
+agents/           os 7 papéis do squad (+ fullstack-dev p/ /story)
 skills/           esteiras, loop de segurança, release, setup
 templates/        CLAUDE-squad.md (handoff) + security-guidelines.md
 ```

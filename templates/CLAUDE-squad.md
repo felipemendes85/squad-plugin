@@ -1,27 +1,35 @@
 # Squad Produto — Orquestração e protocolo de handoff
 
-Este projeto usa o plugin **squad-produto** (5 agentes: PO, UX, Full Stack Dev,
-QA, DPO/Segurança). As regras abaixo valem para TODOS os agentes do squad.
+Este projeto usa o plugin **squad-produto** (7 agentes: PO, UX, Tech Lead,
+Backend Dev, Frontend Dev, QA, DPO/Segurança). As regras abaixo valem para
+TODOS os agentes do squad.
 
 ## Cadeia de produção
 
 ```
-demanda → po → ux → fullstack-dev → qa ─┐
-                                  └→ dpo-security (paralelo ao qa)
-                                        └→ /release (gate humano)
+demanda → po → ux → tech-lead → backend-dev ─┐
+                              └→ frontend-dev ┴→ qa ─┐
+                                                └→ dpo-security (paralelo ao qa)
+                                                      └→ /release (gate humano)
 ```
 
-Cada etapa só começa quando a anterior entregou o artefato válido:
+Cada etapa só começa quando a anterior entregou o artefato válido. O
+`tech-lead` decide, por story, se ela é frontend-only (Supabase direto) ou
+cruza para o backend Python — só nesse segundo caso o `backend-dev` entra:
 
 | Agente | Lê | Escreve (é dono de) |
 |--------|----|---------------------|
 | `po` | demanda do Felipe | `docs/backlog.md` |
 | `ux` | `docs/backlog.md` | `docs/ux-specs.md` |
-| `fullstack-dev` | backlog + ux-specs + `docs/security-guidelines.md` | código-fonte + `docs/dev-notes.md` |
-| `qa` | backlog + ux-specs + dev-notes | `tests/` + `docs/qa-report.md` |
+| `tech-lead` | backlog + ux-specs | `docs/tech-spec.md` (contrato de API, roteamento por story) |
+| `backend-dev` | tech-spec + `docs/security-guidelines.md` | código do serviço Python + `docs/dev-notes-backend.md` |
+| `frontend-dev` | ux-specs + tech-spec | código do app Next.js/React + `docs/dev-notes-frontend.md` |
+| `qa` | backlog + ux-specs + dev-notes-* | `tests/` + `docs/qa-report.md` |
 | `dpo-security` | tudo acima + guidelines | `docs/security-review.md` |
 
-Nenhum agente escreve nos arquivos dos outros.
+Nenhum agente escreve nos arquivos dos outros. `backend-dev` e
+`frontend-dev` normalmente também escrevem em pastas físicas diferentes do
+repo — reduz colisão por construção, não só por convenção.
 
 ## Protocolo de handoff (obrigatório para todo agente)
 

@@ -10,7 +10,7 @@
     {
       "name": "squad-produto",
       "displayName": "Squad Produto",
-      "description": "Squad multi-agente: PO, UX, Dev (Python/Supabase/Vercel), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Esteiras /demanda, /story e /team, loop de segurança e gate humano de release.",
+      "description": "Squad multi-agente: PO, UX, Tech Lead, Backend Dev e Frontend Dev (Python/FastAPI/Supabase + Next.js/React), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Esteiras /demanda, /story e /team, loop de segurança e gate humano de release.",
       "source": "./",
       "category": "development",
       "keywords": ["squad", "multi-agent", "lgpd", "security", "product"]

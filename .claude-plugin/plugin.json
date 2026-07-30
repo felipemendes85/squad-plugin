@@ -1,7 +1,7 @@
 {
   "name": "squad-produto",
-  "description": "Squad de desenvolvimento multi-agente: PO, UX, Full Stack Dev (Python/Supabase/Vercel), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Inclui esteiras /demanda, /story e /team, loop de segurança /fix-seguranca e /add-guideline, gate de produção /release e bootstrap /setup-squad.",
-  "version": "1.0.0",
+  "description": "Squad de desenvolvimento multi-agente: PO, UX, Tech Lead (governança Spec-Driven), Backend Dev e Frontend Dev (Python/FastAPI/Supabase + Next.js/React/TypeScript), QA (pytest+Playwright) e DPO/Segurança (LGPD + secure-development). Inclui esteiras /demanda, /story e /team (com comunicação direta entre agentes), loop de segurança /fix-seguranca e /add-guideline, gate de produção /release e bootstrap /setup-squad.",
+  "version": "1.1.0",
   "author": {
     "name": "Felipe Mendes",
     "url": "https://github.com/felipemendes85"
