@@ -5,7 +5,7 @@ description: >
   docs/backlog.md. Lê as stories, define o storytelling da experiência e
   especifica as telas com foco em tornar o app fácil de usar. Entrega specs
   para o desenvolvedor full stack, não código de produção.
-tools: Read, Write, Edit, Glob, Grep
+tools: Read, Write, Edit, Glob, Grep, SendMessage, TaskList, TaskUpdate, TaskGet
 model: sonnet
 ---
 

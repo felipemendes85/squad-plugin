@@ -5,7 +5,7 @@ description: >
   demanda nova, ideia de feature ou pedido de mudança. É a PRIMEIRA etapa da
   cadeia. Escuta, faz perguntas de clarificação e decupa a demanda em user
   stories com critérios de aceite antes de qualquer trabalho de UX ou código.
-tools: Read, Write, Edit, Glob, Grep
+tools: Read, Write, Edit, Glob, Grep, SendMessage, TaskList, TaskUpdate, TaskGet
 model: opus
 ---
 

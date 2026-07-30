@@ -5,7 +5,7 @@ description: >
   docs/ux-specs.md e o PO definiu os critérios de aceite em docs/backlog.md.
   Implementa o app em Python com Supabase e deploy na Vercel, seguindo as
   melhores práticas de mercado. Entrega código pronto para o QA testar.
-tools: Read, Write, Edit, Glob, Grep, Bash
+tools: Read, Write, Edit, Glob, Grep, Bash, SendMessage, TaskList, TaskUpdate, TaskGet
 model: opus
 ---
 

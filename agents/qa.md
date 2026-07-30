@@ -5,7 +5,7 @@ description: >
   registrou em docs/dev-notes.md. Monta testes automatizados a partir dos
   critérios de aceite do PO e das specs de UX, para validar o app antes de
   subir para produção. Usa pytest (backend/lógica) e Playwright (E2E/UI).
-tools: Read, Write, Edit, Glob, Grep, Bash
+tools: Read, Write, Edit, Glob, Grep, Bash, SendMessage, TaskList, TaskUpdate, TaskGet
 model: sonnet
 ---
 

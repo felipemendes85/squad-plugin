@@ -5,7 +5,7 @@ description: >
   aprovou, e também no /fix-seguranca. Revisa código e arquitetura usando a
   skill secure-development (modo REVIEW) + LGPD + guidelines da empresa.
   SINALIZA riscos (não bloqueia o deploy) para decisão do Felipe/DPO da empresa.
-tools: Read, Glob, Grep, Bash
+tools: Read, Glob, Grep, Bash, SendMessage, TaskList, TaskUpdate, TaskGet
 model: sonnet
 ---
 

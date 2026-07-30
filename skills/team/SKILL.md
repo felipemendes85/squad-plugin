@@ -28,6 +28,15 @@ avise o Felipe para adicionar ao `.claude/settings.json` do projeto:
 
 e reiniciar a sessão antes de continuar. Não tente contornar.
 
+Verifique também que os 5 agentes (`po`, `ux`, `fullstack-dev`, `qa`,
+`dpo-security`) têm `SendMessage`, `TaskList`, `TaskUpdate`, `TaskGet` na
+`tools:` do frontmatter. Sem isso, teammates não conseguem se falar nem ler a
+lista de tarefas — o `/team` degrada em silêncio para uma esteira `/demanda`
+com você relayando cada troca (já aconteceu: um teammate tenta avisar outro,
+não consegue, e o erro só aparece como retrabalho depois). Se faltar em
+algum, avise o Felipe e pergunte se quer que você adicione antes de spawnar
+o time.
+
 ## Monte o time (5 teammates)
 
 Spawne 5 teammates, cada um com o briefing do papel. IMPORTANTE: teammates
@@ -35,19 +44,18 @@ NÃO herdam seu histórico de conversa — carregam CLAUDE.md, MCP e skills do
 projeto automaticamente, mas o contexto específico da demanda você precisa
 passar no prompt de spawn. Seja generoso no briefing inicial.
 
-Os briefings dos papéis estão no diretório do plugin, em
-`${CLAUDE_PLUGIN_ROOT}/agents/`:
+Os 5 papéis já estão instalados como subagents no seu ambiente (`po`, `ux`,
+`fullstack-dev`, `qa`, `dpo-security`) — spawne cada teammate a partir do
+subagent correspondente:
 
 - **po** — decupa a demanda em user stories com critérios de aceite em
-  `docs/backlog.md`. Papel descrito em `${CLAUDE_PLUGIN_ROOT}/agents/po.md`.
-- **ux** — especifica telas em `docs/ux-specs.md`. Ver
-  `${CLAUDE_PLUGIN_ROOT}/agents/ux.md`.
-- **dev** — implementa em Python/Supabase/Vercel, lê as guidelines de
-  segurança ANTES de codar. Ver `${CLAUDE_PLUGIN_ROOT}/agents/fullstack-dev.md`.
-- **qa** — testa com pytest + Playwright em `docs/qa-report.md`. Ver
-  `${CLAUDE_PLUGIN_ROOT}/agents/qa.md`.
-- **dpo** — revisa segurança/LGPD em `docs/security-review.md`, sinaliza (não
-  bloqueia). Ver `${CLAUDE_PLUGIN_ROOT}/agents/dpo-security.md`.
+  `docs/backlog.md`.
+- **ux** — especifica telas em `docs/ux-specs.md`.
+- **dev** (`fullstack-dev`) — implementa em Python/Supabase/Vercel, lê as
+  guidelines de segurança ANTES de codar.
+- **qa** — testa com pytest + Playwright em `docs/qa-report.md`.
+- **dpo** (`dpo-security`) — revisa segurança/LGPD em `docs/security-review.md`,
+  sinaliza (não bloqueia).
 
 Para cada teammate, inclua no prompt de spawn: o papel, o arquivo de agente
 correspondente como referência, a demanda, e quais arquivos ele é dono de
