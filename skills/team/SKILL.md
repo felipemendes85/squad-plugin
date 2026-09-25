@@ -17,25 +17,28 @@ $ARGUMENTS
 
 ## Pré-requisito (verifique antes de tudo)
 
-Agent teams exigem a flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` no
-settings.json ou no ambiente. Se ela não estiver ativa, o Claude cria
-subagents em vez de teammates. Se você perceber que a flag não está ativa,
-avise o Felipe para adicionar ao `.claude/settings.json` do projeto:
+O único requisito obrigatório é `SendMessage`, na sua sessão e na `tools:`
+dos 7 agentes (`po`, `ux`, `tech-lead`, `backend-dev`, `frontend-dev`, `qa`,
+`dpo-security`). Com ele, os agentes conversam direto entre si, sem você no
+meio. Se faltar, avise o Felipe antes de montar o time.
 
-```json
-{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
-```
+A flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` faz os papéis rodarem como
+teammates em sessões próprias. Sem ela, rode como subagents em background:
+a troca direta por `SendMessage` continua funcionando (testado em 2.1.217).
+Não trate a falta da flag como motivo para virar relay.
 
-e reiniciar a sessão antes de continuar. Não tente contornar.
+`TaskList`, `TaskUpdate`, `TaskGet` e `TaskCreate` são opcionais. Nesta
+versão elas somem durante a sessão sem aviso, e o Claude Code as descarta
+em silêncio da `tools:` dos agentes. Se existirem, use. Se não existirem,
+use o quadro em arquivo (seção "Lista de tarefas compartilhada").
 
-Verifique também que os 7 agentes (`po`, `ux`, `tech-lead`, `backend-dev`,
-`frontend-dev`, `qa`, `dpo-security`) têm `SendMessage`, `TaskList`,
-`TaskUpdate`, `TaskGet` na `tools:` do frontmatter. Sem isso, teammates não
-conseguem se falar nem ler a lista de tarefas — o `/team` degrada em
-silêncio para uma esteira `/demanda` com você relayando cada troca (já
-aconteceu: um teammate tenta avisar outro, não consegue, e o erro só aparece
-como retrabalho depois). Se faltar em algum, avise o Felipe e pergunte se
-quer que você adicione antes de spawnar o time.
+## Como a conversa entre agentes funciona
+
+Um agente não consegue esperar resposta dentro do próprio turno. O fluxo
+correto é: manda a pergunta por `SendMessage`, encerra o turno dizendo
+exatamente o que está aguardando e de quem, e a resposta retoma o agente
+depois. Inclua essa regra no briefing de cada teammate. Sem ela, o agente
+encerra achando que ficou sem resposta.
 
 ## Monte o time (7 teammates)
 
@@ -71,6 +74,7 @@ escrever (para não colidir — agent teams não isolam em worktree por padrão)
 Agent teams não isolam teammates em worktrees. Cada teammate é DONO de um
 conjunto de arquivos e não escreve nos dos outros:
 
+- líder (você) → `docs/team-board.md`
 - po → `docs/backlog.md`
 - ux → `docs/ux-specs.md`
 - tech-lead → `docs/tech-spec.md`
@@ -89,6 +93,12 @@ arquivos em paralelo, recomende ao Felipe rodar com git worktrees
 (`claude --worktree`).
 
 ## Lista de tarefas compartilhada e dependências
+
+Se `TaskCreate`/`TaskList` existirem na sessão, use-as. Se não existirem,
+mantenha o quadro em `docs/team-board.md`: você (líder) é o único dono do
+arquivo; os teammates leem e reportam mudança de status por `SendMessage`
+para você, que atualiza o quadro. Uma linha por tarefa: ID, papel, story,
+status (pendente, em andamento, bloqueada, concluída), dependência.
 
 Popule a lista de tarefas do time codificando as dependências da cadeia:
 
