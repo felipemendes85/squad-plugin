@@ -1,6 +1,6 @@
 ---
 name: team
-description: Roda a demanda como AGENT TEAM (teammates que se comunicam entre si), não como subagents. Exige a flag CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS habilitada. Use quando quiser paralelismo real e coordenação direta entre os papéis.
+description: Roda a demanda com os papéis em paralelo, conversando direto entre si por SendMessage, em vez da esteira sequencial do /demanda. Use quando quiser paralelismo real e coordenação direta entre os papéis.
 argument-hint: <descrição da demanda>
 disable-model-invocation: true
 ---
