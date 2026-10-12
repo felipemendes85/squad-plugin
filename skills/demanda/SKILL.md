@@ -71,8 +71,14 @@ vazia/incompleta, NÃO avance: reacione o mesmo agente apontando o que faltou.
 - Saída obrigatória: testes em `tests/` + `docs/qa-report.md` com o resultado.
 - Gate de qualidade: se `qa-report.md` apontar QUALQUER critério de aceite
   quebrado, devolva ao `backend-dev` ou `frontend-dev` (conforme o critério)
-  com o critério violado, depois rode o `qa` de novo. Repita até a suíte
-  passar. NÃO avance para o deploy com teste vermelho.
+  com o critério violado, depois rode o `qa` de novo.
+- Teto: no máximo 3 voltas de correção. Registre "Volta N de 3" em
+  `docs/qa-report.md`. Se a 3ª volta ainda tiver critério quebrado, PARE o
+  loop: acione o `tech-lead` para diagnosticar se o problema está no
+  critério, no contrato ou na implementação, e leve ao Felipe o diagnóstico,
+  os critérios ainda quebrados e as opções (ajustar o critério, ajustar o
+  contrato, ou mais uma volta autorizada por ele).
+- NÃO avance para o deploy com teste vermelho.
 
 ### Etapa 6 — DPO / Segurança
 - Pré-requisito: `qa-report.md` sem critério quebrado.
@@ -82,6 +88,23 @@ vazia/incompleta, NÃO avance: reacione o mesmo agente apontando o que faltou.
   (Alto/Médio/Baixo) e resumo executivo.
 - Observação: o DPO SINALIZA, não bloqueia. Riscos altos viram recomendação
   forte, mas a decisão de deploy é do Felipe / DPO da empresa.
+
+## Métricas da execução (obrigatório)
+
+Mantenha `docs/metrics.md`; você, o orquestrador, é o único dono do arquivo.
+Cada subagent que terminar vira uma linha, neste formato:
+
+```
+| data | demanda | etapa | agente | modelo | volta | tokens | tool_uses | duração_ms | resultado |
+```
+
+`tokens`, `tool_uses` e `duração_ms` vêm do bloco `usage` que acompanha o
+resultado do subagent (`subagent_tokens`, `tool_uses`, `duration_ms`).
+`modelo` vem do frontmatter do agente. `volta` é 1 na primeira execução e
+sobe a cada correção. Se o bloco `usage` não vier, escreva `n/d`; nunca
+estime. Na entrega, informe o total de tokens, a duração por etapa e a parte
+do total gasta em retrabalho (voltas 2 e 3). Limite: o número cobre só os
+subagents, não o consumo do próprio orquestrador.
 
 ## Entrega final
 
@@ -97,6 +120,8 @@ Ao fim das etapas, produza um RESUMO CONSOLIDADO para o Felipe contendo:
 7. **Parecer do DPO** (riscos por severidade + recomendação de deploy).
 8. **Status final:** pronto para deploy? Sim / Sim com ressalvas / Não —
    e o que falta.
+9. **Custo:** total de tokens, duração por etapa e parte gasta em retrabalho
+   (de `docs/metrics.md`).
 
 Liste os artefatos gerados em `docs/` e o branch com o código.
 

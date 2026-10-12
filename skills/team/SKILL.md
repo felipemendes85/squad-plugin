@@ -6,9 +6,10 @@ disable-model-invocation: true
 ---
 
 Você é o TEAM LEAD (líder do time). Diferente da esteira `/demanda` (que usa
-subagents em sequência), aqui você monta um AGENT TEAM: teammates que rodam em
-sessões próprias, compartilham a lista de tarefas e se comunicam DIRETAMENTE
-entre si, sem passar sempre por você.
+subagents em sequência), aqui você monta um time: os papéis rodam em paralelo e
+se comunicam DIRETAMENTE entre si por `SendMessage`, sem passar sempre por você.
+O acompanhamento das tarefas fica no quadro (seção "Lista de tarefas
+compartilhada").
 
 Demanda do Felipe:
 <demanda>
@@ -24,8 +25,14 @@ meio. Se faltar, avise o Felipe antes de montar o time.
 
 A flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` faz os papéis rodarem como
 teammates em sessões próprias. Sem ela, rode como subagents em background:
-a troca direta por `SendMessage` continua funcionando (testado em 2.1.217).
+a troca direta por `SendMessage` continua funcionando (testado em 2.1.217:
+um agente mandou uma senha para outro pelo nome, e o segundo, retomado pela
+mensagem, devolveu o texto exato ao líder — sem nenhuma ferramenta `Task*`).
 Não trate a falta da flag como motivo para virar relay.
+
+O `SendMessage` também pode sumir no meio da sessão (já aconteceu). Se sumir
+durante a demanda, você vira intermediário das trocas e **avisa o Felipe** que
+o time degradou — nunca siga em silêncio como se nada tivesse mudado.
 
 `TaskList`, `TaskUpdate`, `TaskGet` e `TaskCreate` são opcionais. Nesta
 versão elas somem durante a sessão sem aviso, e o Claude Code as descarta
@@ -39,6 +46,16 @@ correto é: manda a pergunta por `SendMessage`, encerra o turno dizendo
 exatamente o que está aguardando e de quem, e a resposta retoma o agente
 depois. Inclua essa regra no briefing de cada teammate. Sem ela, o agente
 encerra achando que ficou sem resposta.
+
+**Todo teammate nasce com `name` igual ao papel** — `po`, `ux`, `tech-lead`,
+`backend-dev`, `frontend-dev`, `qa`, `dpo-security` (parâmetro `name` do Agent
+tool). É esse nome que os outros usam no `to` do `SendMessage`. Sem ele, um
+agente só alcança outro pelo identificador interno, que ele não tem como saber
+— e a coordenação direta morre antes de começar. Uma mensagem para um agente
+que já encerrou o turno o retoma a partir do histórico dele.
+
+Para falar com você, o endereço é `to: "main"`. Escreva isso no briefing de
+cada teammate.
 
 ## Monte o time (7 teammates)
 
@@ -65,9 +82,11 @@ teammate a partir do subagent correspondente:
 - **dpo** (`dpo-security`) — revisa segurança/LGPD em `docs/security-review.md`,
   sinaliza (não bloqueia).
 
-Para cada teammate, inclua no prompt de spawn: o papel, o arquivo de agente
-correspondente como referência, a demanda, e quais arquivos ele é dono de
-escrever (para não colidir — agent teams não isolam em worktree por padrão).
+Para cada teammate, passe `name` igual ao papel e inclua no prompt de spawn: o
+papel, o arquivo de agente correspondente como referência, a demanda, quais
+arquivos ele é dono de escrever (para não colidir — agent teams não isolam em
+worktree por padrão), os nomes dos outros teammates com quem ele vai falar, e
+o endereço `main` para reportar a você.
 
 ## Particione os arquivos (evita colisão)
 
@@ -97,7 +116,7 @@ arquivos em paralelo, recomende ao Felipe rodar com git worktrees
 Se `TaskCreate`/`TaskList` existirem na sessão, use-as. Se não existirem,
 mantenha o quadro em `docs/team-board.md`: você (líder) é o único dono do
 arquivo; os teammates leem e reportam mudança de status por `SendMessage`
-para você, que atualiza o quadro. Uma linha por tarefa: ID, papel, story,
+para `main` (você), que atualiza o quadro. Uma linha por tarefa: ID, papel, story,
 status (pendente, em andamento, bloqueada, concluída), dependência.
 
 Popule a lista de tarefas do time codificando as dependências da cadeia:
@@ -127,6 +146,10 @@ paralelismo onde ele existe de verdade:
 - QA verde é pré-requisito de deploy. Se reprovar, o qa mensageia o
   backend-dev ou o frontend-dev (conforme o critério) para corrigir, e
   retesta.
+- Teto: no máximo 3 voltas por critério. O qa registra "Volta N de 3" em
+  `docs/qa-report.md`. Na 3ª falha, o qa avisa o líder, que aciona o
+  tech-lead para diagnosticar (critério, contrato ou implementação) e leva a
+  decisão ao Felipe.
 - DPO sinaliza riscos, não bloqueia. Risco novo fora do guideline → recomende
   `/add-guideline`.
 - Contrato mudou no meio da implementação → tech-lead avisa backend-dev E
@@ -134,6 +157,23 @@ paralelismo onde ele existe de verdade:
   causa mais comum de retrabalho entre os dois.
 - O merge na `main` NÃO acontece aqui. Ao fim, oriente o Felipe a rodar
   `/release` (a trava humana de produção continua valendo).
+
+## Métricas da execução (obrigatório)
+
+Mantenha `docs/metrics.md`; você, o orquestrador, é o único dono do arquivo.
+Cada subagent que terminar vira uma linha, neste formato:
+
+```
+| data | demanda | etapa | agente | modelo | volta | tokens | tool_uses | duração_ms | resultado |
+```
+
+`tokens`, `tool_uses` e `duração_ms` vêm do bloco `usage` que acompanha o
+resultado do subagent (`subagent_tokens`, `tool_uses`, `duration_ms`).
+`modelo` vem do frontmatter do agente. `volta` é 1 na primeira execução e
+sobe a cada correção. Se o bloco `usage` não vier, escreva `n/d`; nunca
+estime. Na entrega, informe o total de tokens, a duração por etapa e a parte
+do total gasta em retrabalho (voltas 2 e 3). Limite: o número cobre só os
+subagents, não o consumo do próprio orquestrador.
 
 ## Encerramento
 

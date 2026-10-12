@@ -31,6 +31,15 @@ Nenhum agente escreve nos arquivos dos outros. `backend-dev` e
 `frontend-dev` normalmente também escrevem em pastas físicas diferentes do
 repo — reduz colisão por construção, não só por convenção.
 
+## Teto de correção e métricas
+
+- Loop QA para dev: no máximo 3 voltas por critério. Na 3ª falha o loop para,
+  o `tech-lead` diagnostica (critério, contrato ou implementação) e a decisão
+  vai ao Felipe.
+- O orquestrador mantém `docs/metrics.md` com tokens, tool_uses e duração de
+  cada subagent e a volta de cada execução. O número cobre só os subagents,
+  não o consumo do próprio orquestrador.
+
 ## Protocolo de handoff (obrigatório para todo agente)
 
 Todo artefato termina com a seção `## Handoff` neste formato:

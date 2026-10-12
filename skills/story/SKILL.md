@@ -36,6 +36,23 @@ para os comandos de segurança quando a feature amadurecer.
 - Lembre o Dev de ler `docs/security-guidelines.md` ANTES de codar.
 - Saída: código + `docs/dev-notes.md`.
 
+## Métricas da execução (obrigatório)
+
+Mantenha `docs/metrics.md`; você, o orquestrador, é o único dono do arquivo.
+Cada subagent que terminar vira uma linha, neste formato:
+
+```
+| data | demanda | etapa | agente | modelo | volta | tokens | tool_uses | duração_ms | resultado |
+```
+
+`tokens`, `tool_uses` e `duração_ms` vêm do bloco `usage` que acompanha o
+resultado do subagent (`subagent_tokens`, `tool_uses`, `duration_ms`).
+`modelo` vem do frontmatter do agente. `volta` é 1 na primeira execução e
+sobe a cada correção. Se o bloco `usage` não vier, escreva `n/d`; nunca
+estime. Na entrega, informe o total de tokens, a duração por etapa e a parte
+do total gasta em retrabalho (voltas 2 e 3). Limite: o número cobre só os
+subagents, não o consumo do próprio orquestrador.
+
 ## Entrega
 
 Resumo curto: story(ies), telas principais, o que foi construído, e como

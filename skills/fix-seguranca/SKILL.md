@@ -34,13 +34,34 @@ Se a referência estiver ambígua, liste os riscos do review e pergunte qual.
   falha se a vulnerabilidade voltar — regressão de segurança). Além de rodar a
   suíte existente para garantir que a correção não quebrou nada.
 - Saída: atualizar `docs/qa-report.md` com o resultado do teste de segurança.
-- Gate: se o teste de correção falhar, devolva ao Dev. Repita até passar.
+- Gate: se o teste de correção falhar, devolva ao Dev.
+- Teto: no máximo 3 voltas (Dev corrige, QA retesta). Registre "Volta N de 3"
+  em `docs/qa-report.md`. Na 3ª falha, PARE: acione o `tech-lead` para
+  diagnosticar se a abordagem de correção está errada e leve ao Felipe o
+  risco, o que cada volta tentou e por que o teste ainda falha.
 
 ### Etapa 3 — DPO confirma
 - Acione o subagent `dpo-security`.
 - Peça que ele reavalie especificamente o(s) risco(s) tratado(s) e atualize
   `docs/security-review.md`: marque o risco como **RESOLVIDO** (com data e o
   que foi feito) ou, se ainda houver exposição, mantenha aberto com o motivo.
+
+## Métricas da execução (obrigatório)
+
+Mantenha `docs/metrics.md`; você, o orquestrador, é o único dono do arquivo.
+Cada subagent que terminar vira uma linha, neste formato:
+
+```
+| data | demanda | etapa | agente | modelo | volta | tokens | tool_uses | duração_ms | resultado |
+```
+
+`tokens`, `tool_uses` e `duração_ms` vêm do bloco `usage` que acompanha o
+resultado do subagent (`subagent_tokens`, `tool_uses`, `duration_ms`).
+`modelo` vem do frontmatter do agente. `volta` é 1 na primeira execução e
+sobe a cada correção. Se o bloco `usage` não vier, escreva `n/d`; nunca
+estime. Na entrega, informe o total de tokens, a duração por etapa e a parte
+do total gasta em retrabalho (voltas 2 e 3). Limite: o número cobre só os
+subagents, não o consumo do próprio orquestrador.
 
 ## Entrega
 
